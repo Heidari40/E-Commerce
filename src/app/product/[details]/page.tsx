@@ -1,0 +1,14 @@
+import CommonDetails from "@/src/components/CommonDetails";
+import { ProductById } from "@/src/services/auth/product/product";
+
+export default async function ProductDetails({ params }: {params: Promise<{ details: string }>}) {
+  const resolvedParams = await params;
+  const productDetailsData = await ProductById(resolvedParams.details);
+  console.log(productDetailsData, "Hamids");
+
+  return (
+    <CommonDetails
+      item={productDetailsData && productDetailsData?.data}
+    />
+  );
+}

@@ -1,0 +1,126 @@
+import Cookies from "js-cookie";
+
+type SizeOption = {
+    id: string;
+    label: string;
+}
+
+type FormData = {
+    
+    name: string;
+    price: number;
+    description: string;
+    category: string;
+    deliveryInfo: string;
+    onSale: string;
+    priceDrop: number;
+    sizes: SizeOption[];
+    imageUrl: string;
+};
+
+
+
+export const addNewProduct = async (formData: FormData) => {
+    try {
+        const response = await fetch("/api/admin/add-product", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+
+            },
+            body: JSON.stringify(formData),
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+export const getAllAdminProducts = async () => {
+    try {
+        const baseUrl = "http://localhost:3000";
+
+        const response = await fetch(`${baseUrl}/api/all-products`, {
+            method: "GET",
+           cache: "no-store", 
+        });
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const updateProduct = async (formData: FormData) => {
+    try {
+        const response = await fetch("/api/admin/update-product", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+            body: JSON.stringify(formData),
+        });
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.log(error);
+        return ({
+            success: false,
+            message: "Something went wrong"
+        });
+
+    }
+}
+export const deleteProduct = async (id: string) => {
+    try {
+
+        const response = await fetch(`/api/admin/delete-product?id=${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const ProductByCategory = async (id: string) => {
+    try{
+        const baseUrl = "http://localhost:3000";
+        const res = await fetch(`${baseUrl}/api/admin/product-by-category?id=${id}`, {
+            method: "GET",
+            cache: "no-store",}
+        );
+        const data = await res.json();
+        return data;
+
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const ProductById = async (id: string) => {
+
+    try{
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||"http://localhost:3000";
+        const response = await fetch(`${baseUrl}/api/admin/product-by-id?id=${id}`, {
+            method: "GET",
+            cache: "no-store",
+        });
+        const data = await response.json();
+        return data;
+
+    }catch(error){
+        console.log(error);
+    }
+}
