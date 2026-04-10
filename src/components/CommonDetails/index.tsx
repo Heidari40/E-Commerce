@@ -8,6 +8,11 @@ import toast from "react-hot-toast";
 import { get } from "http";
 
 
+type SizeOption = {
+    id: string;
+    label: string;
+}
+
 type ProductType = {
     _id: string;
     name: string;
@@ -18,7 +23,7 @@ type ProductType = {
     onSale: string;
     priceDrop: number;
     imageUrl: string;
-    sizes: string[];
+    sizes: SizeOption[];
 }
 
 
@@ -76,7 +81,7 @@ export default function ProductDetails({ item }: { item: ProductType }) {
                                         className="flex-0 gap-8 aspect-square mb-3 h-20  border-2 rounded-lg border-gray-100 ">
                                         <Image
                                             src={item?.imageUrl}
-                                            alt="Product Details"
+                                            alt={item?.name}
                                             width={100}
                                             height={100}
                                             className="object-cover border border-gray-100 rounded-lg"
@@ -84,16 +89,17 @@ export default function ProductDetails({ item }: { item: ProductType }) {
                                     </button>
                                 </div>
                             </div>
+                           
                             <button
                                 type="button"
-                                className="w-full h-full mx-12 justify-end"
+                                className="mx-10 "
                             >
                                 <Image
                                     src={item?.imageUrl}
                                     alt= {item?.name}
-                                    className="h-full w-full object-cover border border-gray-100 rounded-lg"
-                                    width={600}
-                                    height={600}
+                                    className="w-[500px] h-[400px] object-cover border border-gray-100 rounded-lg"
+                                    width={100}
+                                    height={100}
                                 />
                             </button>
                         </div>

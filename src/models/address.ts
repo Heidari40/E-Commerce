@@ -1,4 +1,4 @@
-import { string } from "joi";
+
 import mongoose from "mongoose";
 
 
@@ -13,7 +13,7 @@ const NewAddressSchema = new mongoose.Schema({
     address: String,
     city: String,
     country: String,
-    postalCode: string,
+    postalCode: String,
 },
   {timestamps: true}
 );

@@ -66,11 +66,11 @@ export default function CartModal() {
             setShow={setShowCartModel}
             mainContent={
                 cartItems && cartItems.length ? (
-                    <ul role="list" className="-my-6 divide-y divide-gray-300">
+                    <ul role="list" className=" my-6 divide-y divide-gray-300  ">
                         {
                             cartItems.map((cartItem: any) => (
                                 <li key={cartItem._id} >
-                                    <div>
+                                    <div className="flex py-6">
                                         <Image
                                             src={
                                                 cartItem &&
@@ -80,7 +80,7 @@ export default function CartModal() {
                                             width={100}
                                             height={100}
                                             alt="cart picturs"
-                                            className="w-full h-full object-cover object-center"
+                                            className="w-[100px]  object-cover object-center"
                                         />
                                     </div>
                                     <div className="ml-4 flex felx-1 flex-col">

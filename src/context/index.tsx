@@ -1,8 +1,10 @@
 'use client';
 
-import { createContext, useState } from "react";
+import { createContext, use, useState } from "react";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 // Når du ikke giver useState en type, så bliver user automatisk any.
 // Det betyder:
@@ -15,8 +17,16 @@ import Cookies from "js-cookie";
 export interface GlobalContextProps {
     user: any;                                        //=> Data om brugeren (kan være hvad som helst)
     setUser: (value: any) => void;
-    isAuthUser: boolean | null;                       //“Kan være true, false eller null.”
+    addresses: any;
+    checkoutFormData: any;
+    setCheckoutFormData: (value: any) => void;
+    setAddresses: (value: any) => void;
+    isAuthUser: boolean | null;        
+    addressFormData:any;
+    setAddressFormData: (value: any) => void;              //“Kan være true, false eller null.”
     setIsAuthedUser: (value: boolean | null) => void;
+    allOrdersForUser: any;
+    setAllOrdersForUser: (value: any) => void;
     cartItems: any;
     setCartItems: (value: any) => void;
     showNavModel: boolean;
@@ -38,6 +48,14 @@ export interface GlobalContextProps {
 export const GlobalContext = createContext<GlobalContextProps>({
     user: null,
     setUser: () => { },
+    addresses: null,
+    setAddresses: () => { },
+    checkoutFormData: null,
+    setCheckoutFormData: () => { },
+    addressFormData: null,
+    setAddressFormData: () => { },
+    allOrdersForUser: null,
+    setAllOrdersForUser: () => { },
     isAuthUser: null,
     cartItems: null,
     setCartItems: () => { },
@@ -54,29 +72,53 @@ export const GlobalContext = createContext<GlobalContextProps>({
     setShowCartModel: () => { },
 })
 
+export const initialCheckoutFormData = {
+    shippingAddress: {},
+    paymentMethod: '',
+    totalPrice: 0,
+    isPaid: false,
+    paidAt: new Date(),
+    isProcessing: true
+
+};
+
+const protectedRoutes = ["/cart", "/orders", "/checkout", "/admin-view"];
+
+const protectedAdminRoutes= [
+    "/admin-view",
+    "/admin-view/add-product",
+    "/admin-view/all-products",
+]
+
 export default function GlobalState({ children }: { children: React.ReactNode }) {
     const [showNavModel, setShowNavModel] = useState(false);
     const [isAuthUser, setIsAuthedUser] = useState<boolean | null>(null);
     const [user, setUser] = useState<any>(null);
+    const [allOrdersForUser, setAllOrdersForUser] = useState<any>(null);
     const [pageLevelLoader, setPageLevelLoader] = useState<boolean>(false);
     const [componentLevelLoader, setComponentLevelLoader] = useState<{ loading: boolean, id: string }>({ loading: false, id: "" });
     const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState<any>(null);
     const [showCartModel, setShowCartModel] = useState<boolean>(false);
-    const [cartItems, setCartItems] = useState<any>(null);
+    const [cartItems, setCartItems] = useState<any>([]);
+    const [addresses, setAddresses] = useState<any>([]);
+    const [checkoutFormData, setCheckoutFormData] = useState<any>(initialCheckoutFormData);
+    const [addressFormData, setAddressFormData] = useState<any>({
+        fullName: "",
+        address: "",
+        city: "",
+        country: "",
+        postalCode: "",
+    });
+    const router = useRouter();
+    const pathName = usePathname();
+
     
-
-
-
-
-
-
-
-
     // - Hvis der ligger en token i browserens cookies → brugeren er (måske) logget ind.
     // - Hvis der ikke ligger en token → brugeren er ikke logget ind.
     // Cookies bruges til auth, fordi de overlever refresh.
     useEffect(() => {
-        if (Cookies.get("token") !== undefined) {
+        const token = Cookies.get("token");
+        if (token) {
             setIsAuthedUser(true);
             const userData = JSON.parse(localStorage.getItem("user") || "{}");
             const getCartItems = JSON.parse(localStorage.getItem("cartItems") || "{}");
@@ -88,7 +130,34 @@ export default function GlobalState({ children }: { children: React.ReactNode })
             setUser({});
         }
 
-    }, [Cookies]);
+    }, []);
+
+    useEffect(() => {
+        const isPublic = 
+        pathName === "/register" ||
+        pathName === "/login" ||
+        pathName === "/" ||
+        pathName.includes("product");
+
+        // Hvis vi stadig er ved at tjekke auth (null), så gør intet endnu
+        if (isAuthUser === null) return;
+
+        if(!isPublic && !isAuthUser && protectedRoutes.includes(pathName)){
+            router.push("/login");
+        }
+    }, [isAuthUser, pathName, router]);
+
+    useEffect(()=> {
+        // Vent på at vi ved om brugeren er logget ind
+        if (isAuthUser === null) return;
+
+        const isAdminRoute = protectedAdminRoutes.some(route => pathName.startsWith(route));
+        const isNotAdmin = user && Object.keys(user).length > 0 && user.role !== "admin";
+
+        if (isAdminRoute && isNotAdmin) {
+            router.push("/unauthorized-page")
+        }
+    }, [user, pathName, isAuthUser, router])
 
 
     return (
@@ -98,6 +167,14 @@ export default function GlobalState({ children }: { children: React.ReactNode })
 
                 user,
                 setUser,
+                addresses,
+                setAddresses,
+                checkoutFormData,
+                setCheckoutFormData,
+                addressFormData,
+                setAddressFormData,
+                allOrdersForUser,
+                setAllOrdersForUser,
                 isAuthUser,
                 cartItems,
                 setCartItems,
@@ -118,5 +195,3 @@ export default function GlobalState({ children }: { children: React.ReactNode })
         </GlobalContext.Provider>
     )
 }
-
-

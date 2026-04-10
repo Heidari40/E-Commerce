@@ -87,12 +87,12 @@ async function helperForUploadingImageToFirebase(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
         uploadImage.on(
             "state_changed",
-            (snapshot) => {}, // 1. Argument: Progress (vi gør ikke noget her, men den skal være der)
-            (error) => {      // 2. Argument: Error
+            (snapshot) => { }, // 1. Argument: Snapshot (progress) - skal være her!
+            (error) => {       // 2. Argument: Error
                 console.log(error);
                 reject(error);
             },
-            () => {           // 3. Argument: Complete
+            () => {            // 3. Argument: Complete
                 getDownloadURL(uploadImage.snapshot.ref)
                     .then((downloadURL) => resolve(downloadURL))
                     .catch((error) => reject(error));
@@ -102,12 +102,12 @@ async function helperForUploadingImageToFirebase(file: File): Promise<string> {
 
 export default function AddProduct() {
     const [formData, setFormData] = useState<ProductForm>(initialFormData);
+    const [isImageUploading, setIsImageUploading] = useState(false);
     const { componentLevelLoader, setComponentLevelLoader,currentUpdatedProduct ,setCurrentUpdatedProduct } = useContext(GlobalContext);
     const router = useRouter();
 
 
     const handleImageSize = async (e: React.ChangeEvent<HTMLInputElement>) => {
-
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -119,21 +119,25 @@ export default function AddProduct() {
 
             return ;
         }
-        // 2. Læs billedet (valgfrit)
-        const reader = new FileReader();
-        reader.onload = () => {
-            const base64 = reader.result;
-            console.log("Image loaded:", base64);
-        }
-        reader.readAsArrayBuffer(file);
 
-        // 3. Upload til Firebase
-        const extractImageUrl = await helperForUploadingImageToFirebase(file);
-        if (typeof extractImageUrl === "string" && extractImageUrl !== "") {
-            setFormData((prevFormData) => ({ //- prevFormData = den gamle state => - Navnet er valgfrit (du kunne kalde det oldData, previous, x osv.)
-                ...prevFormData,
-                imageUrl: extractImageUrl,
-            }));
+        try {
+            setIsImageUploading(true);
+            toast.loading("Uploading image...", { id: "uploading" });
+
+            // 3. Upload til Firebase
+            const extractImageUrl = await helperForUploadingImageToFirebase(file);
+            
+            if (typeof extractImageUrl === "string" && extractImageUrl !== "") {
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    imageUrl: extractImageUrl,
+                }));
+                toast.success("Image uploaded successfully", { id: "uploading" });
+            }
+        } catch (error) {
+            toast.error("Error uploading image", { id: "uploading" });
+        } finally {
+            setIsImageUploading(false);
         }
 
     }
@@ -174,7 +178,6 @@ export default function AddProduct() {
         } else {
             toast.error(res.message);
             setComponentLevelLoader({ loading: false, id: "" });
-            setFormData(initialFormData);
         }
     }
     console.log(formData);
@@ -243,8 +246,9 @@ export default function AddProduct() {
                     )}
 
                     <button
+                        disabled={isImageUploading || (formData.imageUrl === "" && currentUpdatedProduct === null)}
                         onClick={handelAddProduckt}
-                        className="inline-flex w-full items-center justify-center bg-black px-9 py-3 pb-2 cursor-pointer rounded-md text-lg text-white font-medium uppercase tracking-wide">
+                        className="disabled:opacity-50 inline-flex w-full items-center justify-center bg-black px-9 py-3 pb-2 cursor-pointer rounded-md text-lg text-white font-medium uppercase tracking-wide">
 
 
                         {componentLevelLoader && componentLevelLoader.loading ? (
@@ -254,10 +258,11 @@ export default function AddProduct() {
                                 loading={componentLevelLoader && componentLevelLoader.loading}
                                 size={10}
                             />
-                        ) : currentUpdatedProduct !== null ?(
+                        ) : isImageUploading ? (
+                            "Uploading image..."
+                        ) : currentUpdatedProduct !== null ? (
                             "Update Product"
-
-                        ):(
+                        ) : (
                             "Add Product"
                             )}
                     </button>
