@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useContext, useEffect, useState } from "react";
+import {useContext, useEffect, useState } from "react";
 import { GlobalContext } from "@/src/context";
 import { useRouter, useSearchParams } from "next/navigation";
 import ComponentLevelLoader from "@/src/components/Loader/componentlevel";
