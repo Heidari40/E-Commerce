@@ -29,13 +29,13 @@ export default function CommonCart({
 
     return (
         <section className=" h-screen bg-gray-100 border border-gray-200">
-            <div className="w-[60%] mx-auto px-4  sm:pd-6 lg:px-8 ">
+            <div className="w-[60%] mx-auto px-4 mt-20  sm:pd-6 lg:px-8 ">
                 <div className="mx-auto mt-8 max-w-screen-xl px-4 sm:px-6 lg:px-8">
-                    <div className="bg-white shadow overflow-hidden ">
+                    <div className="bg-white shadow ">
                         <div className="px-4 py-6 sm:px-8 sm:py-10">
                             <div className="flow-root">
                                 {cartItems && cartItems.length ? (
-                                    <ul className="">
+                                    <ul className="my-8">
                                         {cartItems?.map((cartItem: any) => (
                                             <li
                                                 className="flex-col flex space-y-3 py-6 text-left sm:flex-row sm:space-x5 sm:space-y-0"
@@ -45,7 +45,7 @@ export default function CommonCart({
                                                         src={
                                                             cartItems &&
                                                             cartItem.productID &&
-                                                            cartItem.productID.imageUrl
+                                                            cartItem.productID.imageUrl || cartItem?.productID?.imageUrl || "https://via.placeholder.com/100"
                                                         }
                                                         width={100}
                                                         height={100}
@@ -56,7 +56,7 @@ export default function CommonCart({
                                                 <div className="flex flex-1 flex-col justify-between ">
                                                     <div className="sm:col-gap-8 sm:grid sm:grid-cols-2">
                                                         <div className="pr-8 sm:pr-4">
-                                                            <p className="text-sm text-blu-400 font-semibold text-gray-900">
+                                                            <p className="text-sm text-blu-400 font-semibold text-gray-900 mx-6">
                                                                 {cartItems &&
                                                                     cartItem.productID &&
                                                                     cartItem.productID.name}
@@ -88,7 +88,7 @@ export default function CommonCart({
                                                                             }
                                                                         />
                                                                     ) : (
-                                                                        "Remove"
+                                                                        <p className="border border-red-300 px-2 cursor-pointer ">Remove</p>
                                                                     )}
                                                             </button>
                                                         </div>
@@ -105,13 +105,7 @@ export default function CommonCart({
                                 <div className="felx items-center justify-between">
                                     <p className="text-sm text-gray-400">Subtotal</p>
                                     <p>
-                                        $ {
-                                            cartItems &&
-                                                cartItems.length ? cartItems.reduce(
-                                                    (total, item) => total + item.productID.price,
-                                                    0
-                                                ) : "0"
-                                        }
+                                        $ {cartItems.reduce((total, item) => total + (item.productID?.price || 0), 0).toFixed(2)}
                                     </p>
                                 </div>
                                 <div className="felx flex-row items-center justify-between">
@@ -122,25 +116,20 @@ export default function CommonCart({
                                 <div className="felx flex-row items-center justify-between">
                                     <p className="text-sm text-gray-400">Total</p>
                                     <p className="text-lg text-black font-semibold">
-                                        ${
-                                            cartItems &&
-                                                cartItems.length ? cartItems.reduce(
-                                                    (total, item) => total + item.productID.price,
-                                                    0
-                                                ) : "0"}
+                                        ${cartItems.reduce((total, item) => total + (item.productID?.price || 0), 0).toFixed(2)}
                                     </p>
                                 </div>
-                               
+
 
                             </div>
-                             <div>
-                                    <button
-                                        onClick={() => router.push("/cart")}
-                                        className="disabled:opacity-50 group inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white font-medium uppercase tracking-wide"
-                                    >
-                                        Chekout
-                                    </button>
-                                </div>
+                            <div>
+                                <button
+                                    onClick={() => router.push("/checkout")}
+                                    className="disabled:opacity-50 group inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white font-medium uppercase tracking-wide cursor-pointer"
+                                >
+                                    Chekout
+                                </button>
+                            </div>
 
                         </div>
 

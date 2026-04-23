@@ -25,18 +25,17 @@ export default function Orders() {
         setPageLevelLoader(true);
 
         const res = await GetAllOrdersForUser(user?._id);
-        console.log(res, "Response from GetAllOrdersForUser");
+      
 
         if (res?.success) {
             setAllOrdersForUser(res.data);
             setPageLevelLoader(false);
-            toast.success("Orders fetched successfully");
         } else {
             setPageLevelLoader(false);
             toast.error(res.message);
         }
     }
-    console.log(allOrdersForUser, "All orders for user");
+    
 
 
     useEffect(() => {
@@ -49,7 +48,7 @@ export default function Orders() {
 
     if (pageLevelLoader) {
         return (
-            <div className="w-full h-screen flex item-center justify-center">
+            <div className="w-full min-h-screen flex item-center justify-center">
                 <PulseLoader
                     color="#000"
                     size={10}
@@ -61,9 +60,6 @@ export default function Orders() {
             </div>
         )
     }
-
-
-
 
     return (
         <section >
@@ -97,8 +93,8 @@ export default function Orders() {
                                                     {item.orderItems.map((orderItem: any, index: any) => (
                                                         <div key={index} className="shrink-0">
                                                             <Image
-                                                                alt={orderItem.product?.name || "Product Image"}
-                                                                src={orderItem?.product?.imageUrl ? orderItem.product.imageUrl : "https://via.placeholder.com/100"}
+                                                                alt={"order Item"}
+                                                                src={orderItem.product && orderItem.product.imageUrl ? orderItem.product.imageUrl : "/placeholder-image.png"}
                                                                 width={100}
                                                                 height={100}
                                                                 className="w-20 h-20 rounded-lg object-cover"
@@ -107,14 +103,14 @@ export default function Orders() {
                                                         </div>
                                                     ))}
                                                 </div>
-                                                <div>
-                                                    <button>
+                                                <div className="flex gap-5">
+                                                    <button  className="ml-5  inline-block bg-black  text-white text-xs px-5 py-3  font-semibold uppercase hover:bg-gray-800 transition-all">
                                                         {item.isProcessing
                                                             ? "Order is Processing"
                                                             : "Order is delivered"}
                                                     </button>
                                                     <button onClick={() => router.push(`/orders/${item._id}`)}
-                                                        className="ml-5 mr-5 inline-block bg-black text-white px-5 py-3 text-xl font-medium uppercase hover:bg-gray-800 transition-all"
+                                                        className="ml-5 mr-5 inline-block bg-black text-white px-5 py-3 text-xs font-semibold uppercase hover:bg-gray-800 transition-all"
                                                     >
                                                         View Order Details
                                                     </button>

@@ -5,8 +5,8 @@ import Order from "@/src/models/order";
 import Product from "@/src/models/product";
 
 
-export const dynamic = "force-dynamic";
 
+export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
 
@@ -28,10 +28,13 @@ export async function GET(req: Request) {
         console.log("AuthUser result in get all orders API:", isAuthUser);
 
         if (isAuthUser) {
-            const extractAllOrders = await Order.find({ user: id }).populate(
+            // Hvis det er Admin kald (get-all-orders), skal vi ikke filtrere på user: id
+            const extractAllOrders = await Order.find({}).populate(
                 {
                     path: "orderItems.product",
                     model: Product,
+                    select: "name price imageUrl email"
+     
                 }
             );
 

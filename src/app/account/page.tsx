@@ -133,7 +133,7 @@ export default function Account() {
                             <p>{user?.role}</p>
                         </div>
                         <button
-                            onClick={() => router.push("")}
+                            onClick={() => router.push("/orders")}
                             className="inline-flex w-full items-center justify-center bg-black px-9 py-3 pb-2 cursor-pointer rounded-md text-lg text-white font-medium uppercase">
                             View Your Orders
                         </button>

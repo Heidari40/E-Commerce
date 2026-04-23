@@ -136,15 +136,14 @@ export default function CheckOut() {
             price_data: {
                 currency: "usd",
                 product_data: {
-                    images: [item.productID.imageUrl],
-                    name: item.productID.name,
+                    images: [item.productID?.imageUrl],
+                    name: item.productID?.name,
                 },
-                unit_amount: item.productID.price * 100,
+                unit_amount: (item.productID?.price) * 100,
             },
             quantity: 1,
         }));
 
-        console.log(createLineItems, "det er creatLineItemssssssss")
 
         const res = await callStripeSession(createLineItems);
         console.log("Stripe session response:", res);
@@ -229,7 +228,7 @@ export default function CheckOut() {
                                         className="flex flex-col  py-4 px-4 rounded-lg bg-white sm:flex-row"
                                         key={item._id}>
                                         <Image
-                                            src={item.productID.imageUrl}
+                                            src={item.productID?.imageUrl || "/placeholder-image.png"}
                                             width={100}
                                             height={100}
                                             alt="cart items"
@@ -250,7 +249,7 @@ export default function CheckOut() {
                             ) : (
 
                                 <div>
-                                    <p className="font-medium text-xl">
+                                    <p className="font-medium text-xl items-center justify-center">
                                         Your cart is empty
                                     </p>
                                 </div>

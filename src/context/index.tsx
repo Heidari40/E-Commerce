@@ -19,6 +19,8 @@ export interface GlobalContextProps {
     setUser: (value: any) => void;
     addresses: any;
     checkoutFormData: any;
+    orderDetails: any;
+    setOrderDetails: (value: any) => void;
     setCheckoutFormData: (value: any) => void;
     setAddresses: (value: any) => void;
     isAuthUser: boolean | null;        
@@ -27,6 +29,8 @@ export interface GlobalContextProps {
     setIsAuthedUser: (value: boolean | null) => void;
     allOrdersForUser: any;
     setAllOrdersForUser: (value: any) => void;
+    allOrdersForAllUsers: any;
+    setAllOrdersForAllUsers: (value: any) => void;
     cartItems: any;
     setCartItems: (value: any) => void;
     showNavModel: boolean;
@@ -50,12 +54,16 @@ export const GlobalContext = createContext<GlobalContextProps>({
     setUser: () => { },
     addresses: null,
     setAddresses: () => { },
+    orderDetails: null,
+    setOrderDetails: () => { },
     checkoutFormData: null,
     setCheckoutFormData: () => { },
     addressFormData: null,
     setAddressFormData: () => { },
     allOrdersForUser: null,
     setAllOrdersForUser: () => { },
+    allOrdersForAllUsers: null,
+    setAllOrdersForAllUsers: () => { },
     isAuthUser: null,
     cartItems: null,
     setCartItems: () => { },
@@ -82,7 +90,7 @@ export const initialCheckoutFormData = {
 
 };
 
-const protectedRoutes = ["/cart", "/orders", "/checkout", "/admin-view"];
+const protectedRoutes = ["/cart", "/orders", "/checkout", "/admin-view", "/account"];
 
 const protectedAdminRoutes= [
     "/admin-view",
@@ -94,14 +102,16 @@ export default function GlobalState({ children }: { children: React.ReactNode })
     const [showNavModel, setShowNavModel] = useState(false);
     const [isAuthUser, setIsAuthedUser] = useState<boolean | null>(null);
     const [user, setUser] = useState<any>(null);
-    const [allOrdersForUser, setAllOrdersForUser] = useState<any>(null);
-    const [pageLevelLoader, setPageLevelLoader] = useState<boolean>(false);
+    const [allOrdersForUser, setAllOrdersForUser] = useState<any>([]);
+    const [pageLevelLoader, setPageLevelLoader] = useState<boolean>(true);
     const [componentLevelLoader, setComponentLevelLoader] = useState<{ loading: boolean, id: string }>({ loading: false, id: "" });
     const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState<any>(null);
     const [showCartModel, setShowCartModel] = useState<boolean>(false);
     const [cartItems, setCartItems] = useState<any>([]);
     const [addresses, setAddresses] = useState<any>([]);
+    const [allOrdersForAllUsers, setAllOrdersForAllUsers] = useState<any>([]);
     const [checkoutFormData, setCheckoutFormData] = useState<any>(initialCheckoutFormData);
+    const [orderDetails, setOrderDetails] = useState<any>(null);
     const [addressFormData, setAddressFormData] = useState<any>({
         fullName: "",
         address: "",
@@ -169,8 +179,12 @@ export default function GlobalState({ children }: { children: React.ReactNode })
                 setUser,
                 addresses,
                 setAddresses,
+                orderDetails,
+                setOrderDetails,
                 checkoutFormData,
                 setCheckoutFormData,
+                allOrdersForAllUsers,
+                setAllOrdersForAllUsers,
                 addressFormData,
                 setAddressFormData,
                 allOrdersForUser,

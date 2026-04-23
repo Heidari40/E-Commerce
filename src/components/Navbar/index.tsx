@@ -20,10 +20,10 @@ type NavItemsProps = {
 
 
 function NavItems({ isModalView = false, isAdminView, router }: NavItemsProps) {
-   
+
     return (
-        <div className={`items-center justify-between w-full lg:flex lg:w-auto
-             ${isModalView ? "" : "hidden"}`}id="nav-items"
+        <div className={`items-center justify-between w-full lg:flex lg:w-auto 
+             ${isModalView ? "" : "hidden"}`} id="nav-items"
         >
 
             <ul
@@ -33,7 +33,7 @@ function NavItems({ isModalView = false, isAdminView, router }: NavItemsProps) {
             >
 
                 {isAdminView ? adminNavOptions.map((item) => (
-                    <li className="cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 text-xs"
+                    <li className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 "
                         key={item.id}
                         onClick={() => router.push(item.path)}
                     >
@@ -42,7 +42,7 @@ function NavItems({ isModalView = false, isAdminView, router }: NavItemsProps) {
                 ))
                     : navOptions.map((item) => (
                         <li
-                            className="cursor-pointer block py-2 pl-3 pr-4 text-sm text-gray-900 rounded md:p-0"
+                            className="cursor-pointer block py-2 pl-3 pr-4 text-sm text-gray-900 rounded md:p-0 py-20 "
                             key={item.id}
                             onClick={() => router.push(item.path)}
                         >
@@ -57,15 +57,22 @@ function NavItems({ isModalView = false, isAdminView, router }: NavItemsProps) {
 
 
 export default function Navbar() {
-    const { showNavModel, setShowNavModel } = useContext(GlobalContext);
-    const { user, setUser, isAuthUser, setIsAuthedUser,
-         currentUpdatedProduct, setCurrentUpdatedProduct, showCartModel, setShowCartModel} = useContext(GlobalContext);
+    const { showNavModel,
+        setShowNavModel,
+        user,
+        setUser,
+        isAuthUser,
+        setIsAuthedUser,
+        currentUpdatedProduct,
+        setCurrentUpdatedProduct,
+        showCartModel,
+        setShowCartModel } = useContext(GlobalContext);
     const router = useRouter();
 
     //usePathname er en hook fra Next.js, der giver dig den aktuelle URL‑sti i browseren. /localhost:3000/admin-view
     const pathName = usePathname();
 
-   
+
     function handleLogout() {
         setIsAuthedUser(false);
         setUser(null);
@@ -75,7 +82,7 @@ export default function Navbar() {
     }
 
     useEffect(() => {
-        if(pathName !== "/admin-view/add-product" && currentUpdatedProduct !== null) setCurrentUpdatedProduct(null);
+        if (pathName !== "/admin-view/add-product" && currentUpdatedProduct !== null) setCurrentUpdatedProduct(null);
     }, [pathName])
 
 
@@ -84,10 +91,10 @@ export default function Navbar() {
 
     return (
         <>
-            <nav className="fixed relative w-full top-0 left-0 bg-white border-b border-gray-200  ">
-                <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto my-4 px-4 sm:px-6 lg:px-8">
+            <nav className="fixed w-full z-20  top-0 left-0 bg-white border-b border-gray-200 ">
+                <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-3 ">
                     <div onClick={() => router.push("/")} className="flex items-center cursor-pointer">
-                        <span className=" self-center text-2xl font-semibold whitespace-nowrap border px-2 ">
+                        <span className=" self-center text-2xl font-semibold whitespace-nowrap border px-2 hidden sm:inline">
                             E-Webshop
                         </span>
                     </div>
@@ -96,13 +103,13 @@ export default function Navbar() {
                             !isAdminView && isAuthUser ? (
                                 <Fragment>
                                     <button onClick={() => router.push("/account")}
-                                   className={NavStyles}>
-                                    Account
+                                        className={`${NavStyles} !flex`}>
+                                        Account
                                     </button>
                                     <button onClick={() => setShowCartModel(true)}
-                                     className={NavStyles}>
+                                        className={`${NavStyles} !flex`}>
                                         Cart
-                                        </button>
+                                    </button>
                                 </Fragment>
                             ) : null}
                         {user?.role === "admin" ? (
@@ -136,12 +143,11 @@ export default function Navbar() {
                         <button
                             data-collapse-toggle="navbar-sticky"
                             type="button"
-                            className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                            className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                             aria-controls="navbar-items"
                             aria-expanded="false"
                             onClick={() => setShowNavModel(true)}
                         >
-
                             <span className="sr-only">Open main menu</span>
                             <svg
                                 className="w-6 h-6"
@@ -165,11 +171,11 @@ export default function Navbar() {
                     />
                 </div>
             </nav>
-
             <CommonModel
                 showModelTitle={false}
                 modalTitle={"Navigation"}
                 mainContent=
+                
                 {<
                     NavItems
                     router={router}
@@ -181,7 +187,7 @@ export default function Navbar() {
                 showbuttons={true}
                 buttonComponent={null}
             />
-            {showCartModel && <CartModel/>}
+            {showCartModel && <CartModel />}
         </>
 
     )

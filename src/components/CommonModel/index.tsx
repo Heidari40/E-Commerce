@@ -17,7 +17,7 @@ export default function CommonModel({ modalTitle, mainContent, showbuttons, butt
     
     return (
         <Transition  as={Fragment} show={show}>
-            <Dialog as="div" className={" relative z-10 lg:hidden "} onClose={setShow}>
+            <Dialog as="div" className={" relative   "} onClose={setShow}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-300"

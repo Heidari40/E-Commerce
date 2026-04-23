@@ -54,6 +54,11 @@ export const GetOrderDetails = async(id: string) => {
                 Authorization: `Bearer ${Cookies.get("token")}`,
             },
         });
+
+        if(!res.ok){
+            const errorData = await res.json();
+            return errorData;
+        }
         const data = await res.json();
         return data;
 
@@ -61,13 +66,14 @@ export const GetOrderDetails = async(id: string) => {
 
     }catch(e) {
         console.log(e)
+        return {error: true, message: "Network error"};
     }
 }
 
 
 export const GetAllOrderForAllUsers = async() => {
-    try{ 
-        const res = await fetch("/api/order/get-all-orders-for-all-users", {
+    try{                       
+        const res = await fetch("/api/admin/order/get-all-orders", {
             method: "GET",
             cache: "no-store",
             headers: {
@@ -78,7 +84,7 @@ export const GetAllOrderForAllUsers = async() => {
         return data;
 
     }catch(e) {
-        console.log(e)
+        console.log("Debug Backend services",e)
     }
 }
 
@@ -87,6 +93,7 @@ export const UpdateStatusOfOrder = async(formData: any) => {
     try{ 
         const res = await fetch(`/api/admin/order/update-order`,{
             method: "PUT",
+            cache: "no-store",
             headers: {
                 "Content-type" : "application/json",
                 Authorization: `Bearer ${Cookies.get("token")}`,
@@ -101,5 +108,9 @@ export const UpdateStatusOfOrder = async(formData: any) => {
 
     }catch(e) {
         console.log(e)
+        return{
+            success: false,
+            message: "Something went wrong! Please try again."
+        }
     }
 }

@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { mongo } from "mongoose"
 
 
 
@@ -11,13 +11,12 @@ const OrderSchema = new mongoose.Schema({
     },
     orderItems: [{
         qty: {
-            type: mongoose.Schema.Types.Number,
+            type: Number,
             required: true,
         },
-      
         product: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Product",
+            ref: "Products",
         }}
     ],
     shippingAddress: {

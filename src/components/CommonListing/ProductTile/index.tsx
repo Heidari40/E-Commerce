@@ -10,16 +10,17 @@ export default function ProductTile({ item }: { item: any }) {
     return (
         <div
           onClick={() => router.push(`/product/${item._id}`)}
+          className="mx-16"
         >
             <div
-                className="w-full h-full aspect-w-1 aspect-h-1 h-30 w-30 rounded-md "
+                className="w-full h-full object-cover cursor-pointer transition-all duration-300 group-hover:scale-110"
             >
                 <Image
                     src={item.imageUrl}
                     alt={item.name}
-                    width={200}
-                    height={200}
-                    className="object-cover object-center justify-center "
+                    width={100}
+                    height={100}
+                    className="h-full w-full object-cover transition-all duration-300 group-hover:scale-125 "
                 />
             </div>
             {item.onSale === "yes" ? (

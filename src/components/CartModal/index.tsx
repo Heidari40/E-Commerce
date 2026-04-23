@@ -27,12 +27,34 @@ export default function CartModal() {
 
 
     async function extractAllCartItems() {
-        const res = await getAllCartItems(user?._id); // MongoDB oprette _id
+        const res = await getAllCartItems(user?._id);
 
-        if (res.success) {
-            setCartItems(res.data);
-            localStorage.setItem("cartItems", JSON.stringify(res.data)); //Gem cart items i browseren, så de stadig findes, selv hvis brugeren refresher siden.”
-        }
+    if (res.success) {
+        const updatedData = res.data && res.data.length > 0
+            ? res.data
+                .filter((item : any) => item.productID != null) // FJERN varer der mangler produkt-data
+                .map((item: any) => {
+                    const basePrice = item.productID.price || 0;
+                    const discount = item.productID.priceDrop || 0;
+                    
+                    const finalPrice = item.productID.onSale === "yes"
+                        ? parseFloat((basePrice - (basePrice * (discount / 100))).toFixed(2))
+                        : basePrice;
+
+                    return {
+                        ...item,
+                        productID: {
+                            ...item.productID,
+                            price: finalPrice
+                        }
+                    };
+                })
+            : [];
+            console.log(cartItems, "cartItemssssssssssssss")
+
+        setCartItems(updatedData);
+        localStorage.setItem("cartItems", JSON.stringify(updatedData));
+    }
 
     }
     //Fordi API-kald ikke må ske i render-funktionen og burger useEffect.
@@ -53,10 +75,9 @@ export default function CartModal() {
         } else {
             toast.error(res.message);
             setComponentLevelLoader({ loading: false, id: "" });
-
-
         }
     }
+    
 
 
     return (
@@ -83,7 +104,7 @@ export default function CartModal() {
                                             className="w-[100px]  object-cover object-center"
                                         />
                                     </div>
-                                    <div className="ml-4 flex felx-1 flex-col">
+                                    <div className="ml-4 flex flex-1 flex-col">
                                         <div>
                                             <div className="flex justify-between text-base font-medium text-gray-900">
                                                 <h3>
@@ -95,9 +116,7 @@ export default function CartModal() {
                                                 </h3>
                                             </div>
                                             <p className="mt-1 text-sm text-gray-500">
-                                                {cartItem &&
-                                                    cartItem.productID &&
-                                                    cartItem.productID.price}
+                                                { cartItem?.productID?.price}
                                             </p>
                                         </div>
                                         <div>
@@ -115,8 +134,8 @@ export default function CartModal() {
                                                             size={8}
                                                         />
                                                     ) : (
-                                                        "Remove"
-                                                        
+                                                        <p className="border border-red-300 px-2 my-2 cursor-pointer mt-2">Remove</p>
+
                                                     )}
                                             </button>
                                         </div>
@@ -130,16 +149,17 @@ export default function CartModal() {
                         Empty Cart
 
                     </h3>
-                </div> 
+                </div>
             }
             buttonComponent={
                 <Fragment>
                     <button
                         type="button"
-                        onClick={() => {router.push("/cart")
-                         setShowCartModel(false);
+                        onClick={() => {
+                            router.push("/cart")
+                            setShowCartModel(false);
                         }}
-                        
+
                         className="mt-1.5 w-full inline-block bg-black text-white px-5 py-3 text-xs font-medium uppercase tracking-wide cursor-pointer"
                     > Go To Cart</button>
                     <button

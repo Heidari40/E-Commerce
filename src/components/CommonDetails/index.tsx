@@ -59,7 +59,7 @@ export default function ProductDetails({ item }: { item: ProductType }) {
 
 
     return (
-        <section className="mx-auto flex max-w-screen-xl px-5 py-5 sm:px-6 lg:px-8">
+        <section className="mx-auto flex max-w-screen-xl px-5 py-12 sm:py-16 pb-10 lg:px-8 ">
             <div className="flex flex-row g:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
                 <div className="w-full lg:col-span-3 lg:row-end-1">
 
@@ -72,7 +72,7 @@ export default function ProductDetails({ item }: { item: ProductType }) {
                                         alt={item?.name}
                                         width={100}
                                         height={100}
-                                        className="object-cover"
+                                        className=" object-cover"
                                     />
                                 </div>
                                 <div className="lg:flex-col ">
@@ -97,9 +97,9 @@ export default function ProductDetails({ item }: { item: ProductType }) {
                                 <Image
                                     src={item?.imageUrl}
                                     alt= {item?.name}
-                                    className="w-[500px] h-[400px] object-cover border border-gray-100 rounded-lg"
-                                    width={100}
-                                    height={100}
+                                    className=" object-cover border border-gray-100 rounded-lg"
+                                    width={500}
+                                    height={500}
                                 />
                             </button>
                         </div>
