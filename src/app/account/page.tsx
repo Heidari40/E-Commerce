@@ -2,7 +2,7 @@
 
 import {useContext, useEffect, useState } from "react";
 import { GlobalContext } from "@/src/context";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import ComponentLevelLoader from "@/src/components/Loader/componentlevel";
 import { PulseLoader } from "react-spinners";
 import { addNewAddressFormControls } from "@/src/utils";
@@ -25,15 +25,14 @@ export default function Account() {
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [currentEditedAddressId, setCurrentEditedAddressId] = useState<string | null>(null);
 
-    //useSearchParams() er måden at arbejde med query‑parametre i React Router — både læse og skrive dem — uden at reloade siden.
-    const params = useSearchParams();
     const router = useRouter();
 
 
     //extract alle data 
     async function extractAllAddresses() {
+        if (!user?._id) return;
         setPageLevelLoader(true);
-        const res = await fetchAlladdresses(user._id);
+        const res = await fetchAlladdresses(user?._id);
 
         if (res.success) {
             setAddresses(res.data);

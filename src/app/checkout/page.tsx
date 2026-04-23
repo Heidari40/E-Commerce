@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, Suspense } from "react"
 import { GlobalContext } from "@/src/context"
 import Image from "next/image"
 import { fetchAlladdresses } from "@/src/services/auth/address/address"
@@ -16,7 +16,7 @@ import { totalmem } from "os"
 
 
 
-export default function CheckOut() {
+function CheckOutContent() {
     const { cartItems, user, addresses, setAddresses, checkoutFormData, setCheckoutFormData } = useContext(GlobalContext)
     const [selectedAddress, setSelectedAddress] = useState(null)
     const router = useRouter();
@@ -259,7 +259,7 @@ export default function CheckOut() {
                 </div>
 
                 <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-                    <p className="font-medium text-xl"> Shippin address details </p>
+                    <p className="font-medium text-xl"> Shipping address details </p>
                     <p className="text-gray-400 font-bold">
                         Comlete you order by selcting address below
                     </p>
@@ -346,5 +346,20 @@ export default function CheckOut() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function CheckOut() {
+    return (
+        <Suspense fallback={
+            <div className="w-full min-h-screen flex items-center justify-center">
+                <PulseLoader
+                    color={"#000000"}
+                    size={30}
+                />
+            </div>
+        }>
+            <CheckOutContent />
+        </Suspense>
     )
 }

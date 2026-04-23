@@ -49,14 +49,11 @@ export default function OrderDetails() {
         if (
            
             user &&
-            params['order-details'] // Tjek at ID er tilgængeligt i URL'en
+            params && params['order-details']
         ) {
             extractOrderDetails();
         }
-
-
-
-    }, [user, params['order-details']]); // Tilføj params som dependency
+    }, [user, params]); 
 
   
     if (pageLevelLoader) {
@@ -105,7 +102,7 @@ export default function OrderDetails() {
                                     <div className="flex flex-row  pb-4 md:pb-8 w-full md:w-40">
                                         <Image
                                             alt="order item image"
-                                            src={item.product && item.product.imageUrl ? item.product.imageUrl : "/placeholder-image.png"}
+                                            src={item.product?.imageUrl || item.products?.imageUrl || "/placeholder-image.png"}
                                             width={200}
                                             height={200}
                                             className="w-full md:block"
@@ -140,7 +137,7 @@ export default function OrderDetails() {
                                         subtotal
                                     </p>
                                     <p className="text-base leading-5 text-gray-900">
-                                        ${orderDetails && orderDetails.totalPrice ? orderDetails.totalPrice.toFixed(2) : "0.00"}
+                                        ${orderDetails?.totalPrice?.toFixed(2) || "0.00"}
                                     </p>
                                 </div>
                                 <div className="flex justify-between w-full">
@@ -194,21 +191,18 @@ export default function OrderDetails() {
                                 </p>
                                 <p className="font-normal ml-2">
                                     Address: {" "}
-                                    {orderDetails && orderDetails.shippingAddress.address}
+                                    {orderDetails?.shippingAddress?.address}
                                 </p>
                                 <p>
-                                    {orderDetails && orderDetails.shippingAddress.city}
-
+                                    City: {orderDetails?.shippingAddress?.city}
                                 </p>
                                 <p>
                                     Country:{" "}
-                                    {orderDetails && orderDetails.shippingAddress.country}
-
+                                    {orderDetails?.shippingAddress?.country}
                                 </p>
                                 <p>
                                     Postal Code: {" "}
-                                    {orderDetails && orderDetails.shippingAddress.postalCode}
-
+                                    {orderDetails?.shippingAddress?.postalCode}
                                 </p>
                             </div>
                         </div>
