@@ -1,11 +1,11 @@
 import CommonListing from "@/src/components/CommonListing";
 import { getAllAdminProducts } from "@/src/services/auth/product/product";
 
-
+export const dynamic = 'force-dynamic';
 
 export default async function AllProducts() {
 
-const getAllProducts = await getAllAdminProducts();
+    const getAllProducts = await getAllAdminProducts();
 
     return(
 
