@@ -23,6 +23,7 @@ type FormData = {
 export const addNewProduct = async (formData: FormData) => {
     try {
         const response = await fetch("/api/admin/add-product", {
+            cache: "no-store",
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -59,6 +60,7 @@ export const updateProduct = async (formData: FormData) => {
     try {
         const response = await fetch("/api/admin/update-product", {
             method: "PUT",
+            cache: "no-store",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${Cookies.get("token")}`,
@@ -82,6 +84,7 @@ export const deleteProduct = async (id: string) => {
 
         const response = await fetch(`/api/admin/delete-product?id=${id}`, {
             method: "DELETE",
+            cache: "no-store",
             headers: {
                 Authorization: `Bearer ${Cookies.get("token")}`,
             },
