@@ -41,7 +41,7 @@ export const addNewProduct = async (formData: FormData) => {
 
 export const getAllAdminProducts = async () => {
     try {
-        const baseUrl = "http://localhost:3000";
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
         const response = await fetch(`${baseUrl}/api/all-products`, {
             method: "GET",
@@ -96,11 +96,11 @@ export const deleteProduct = async (id: string) => {
 
 export const ProductByCategory = async (id: string) => {
     try{
-        const baseUrl = "http://localhost:3000";
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
         const res = await fetch(`${baseUrl}/api/admin/product-by-category?id=${id}`, {
             method: "GET",
-            cache: "no-store",}
-        );
+            cache: "no-store",
+        });
         const data = await res.json();
         return data;
 
@@ -112,7 +112,7 @@ export const ProductByCategory = async (id: string) => {
 export const ProductById = async (id: string) => {
 
     try{
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||"http://localhost:3000";
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
         const response = await fetch(`${baseUrl}/api/admin/product-by-id?id=${id}`, {
             method: "GET",
             cache: "no-store",
