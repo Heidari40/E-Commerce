@@ -13,6 +13,9 @@ import { GlobalContext } from "@/src/context";
 import { useRouter } from "next/navigation";
 import ComponentLevelLoader from "@/src/components/Loader/componentlevel";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type FirebaseConfigPropstypes = {
     apiKey: string;
     authDomain: string;
