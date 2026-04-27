@@ -27,6 +27,7 @@
     "stripe": "^20.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.10",
@@ -39,5 +40,13 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.2.0",
     "typescript": "^5.9.3"
-  }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "build": "next build"
+  
+}
+
 }
