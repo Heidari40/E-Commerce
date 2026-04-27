@@ -11,10 +11,9 @@ import { CreateNewOrder } from "@/src/services/auth/order/order"
 import toast from "react-hot-toast"
 import { PulseLoader } from "react-spinners"
 import Cookies from "js-cookie"
-import { totalmem } from "os"
 
-
-
+// Initialize Stripe outside the component to prevent re-creation on every render
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 function CheckOutContent() {
     const { cartItems, user, addresses, setAddresses, checkoutFormData, setCheckoutFormData } = useContext(GlobalContext)
@@ -23,13 +22,6 @@ function CheckOutContent() {
     const [isOrderProcessing, setIsOrderProcessing] = useState(false);
     const [orderSuccess, setOrderSuccess] = useState(false);
     const params = useSearchParams();
-
-
-
-
-    // Initialize Stripe outside the component to prevent re-creation on every render
-    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-
     // fetch alle adresses
     async function getAllAddresses() {
         const res = await fetchAlladdresses(user?._id)

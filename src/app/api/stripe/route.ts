@@ -2,8 +2,12 @@
 import AuthUser from "@/src/middleware/AuthUser";
 import { NextResponse } from "next/server";
 
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
+// Tjek om STRIPE_SECRET_KEY er defineret, før Stripe initialiseres
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error("STRIPE_SECRET_KEY er ikke defineret i miljøvariablerne.");
+}
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 export const dynamic = "force-dynamic";
 
