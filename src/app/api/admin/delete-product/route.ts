@@ -6,6 +6,7 @@ import AuthUser from "@/src/middleware/AuthUser";
 
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0
 
 export async function DELETE(req: Request) {
     try {

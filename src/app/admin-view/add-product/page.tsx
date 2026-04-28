@@ -8,7 +8,7 @@ import { adminAddProductformControls, AvailableSizes } from "@/src/utils"
 import { useState, useContext, useEffect } from "react";
 import SelectComponent from "@/src/components/CommonModel/FormElements/SelectComponent";
 import { toast } from "react-hot-toast";
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { addNewProduct, updateProduct } from "@/src/services/auth/product/product";
 import { GlobalContext } from "@/src/context";
@@ -70,8 +70,9 @@ const initialFormData: ProductForm = {
 
 type FormFieldKey = "name" | "price" | "description" | "category" | "sizes" | "deliveryInfo" | "onSale" | "imageUrl" | "priceDrop";
 
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app, process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET)
+// Sikker initialisering af Firebase (kører kun hvis appen ikke allerede er startet)
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const storage = getStorage(app);
 
 const createUniqueFileName = (getFile: File) => {
     const timeStamp = Date.now(); //giver dig det aktuelle tidspunkt i millisekunder siden 1. januar 1970
@@ -174,6 +175,7 @@ export default function AddProduct() {
             toast.success(res.message);
             setFormData(initialFormData);
             // setCurrentUpdatedProduct(null);
+            router.refresh();
             setTimeout(() => {
                 router.push("/admin-view/all-products");
             }, 1000);

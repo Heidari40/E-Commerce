@@ -4,6 +4,7 @@ import connectToDB from "@/src/lib/db";
 import AuthUser from "@/src/middleware/AuthUser";
 
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export async function PUT(req: Request) {
     try {

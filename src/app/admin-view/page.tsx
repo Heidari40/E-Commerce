@@ -174,10 +174,10 @@ export default function AdminView() {
                                                     ? "bg-yellow-500 text-black"
                                                     : "bg-green-500 text-white"
                                                     }
-                                                    disabled:opacity-50
+                                                    opacity-100
                                                     `}>
                                                     {item.isProcessing
-                                                        ? "orders is Processing" 
+                                                        ? "Order is processing" 
                                                         : "Order is delivered"}
                                                 </button>
                                                 <button
