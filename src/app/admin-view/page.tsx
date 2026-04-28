@@ -9,9 +9,6 @@ import { useEffect } from "react";
 import Image from "next/image";
 import ComponentLevelLoader from "@/src/components/Loader/componentlevel";
 
-
-
-
 export default function AdminView() {
 
     const { user,

@@ -112,6 +112,7 @@ export default function ProductButtons({ item }: { item: any }) {
                     
                 ): (
                         "Add to cart"
+                        
                     )}
 
         </button>
