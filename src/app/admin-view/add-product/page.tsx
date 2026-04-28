@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic';
+
 import InputComponent from "@/src/components/CommonModel/FormElements/InputComponent";
 import TileComponent from "@/src/components/CommonModel/FormElements/TileComponent"
 import { adminAddProductformControls, AvailableSizes } from "@/src/utils"
@@ -157,7 +159,7 @@ export default function AddProduct() {
         })
     }
 
-    async function handelAddProduckt() {
+    async function handleAddProduct() {
 
         setComponentLevelLoader({ loading: true, id: "" });
 
@@ -247,7 +249,7 @@ export default function AddProduct() {
 
                     <button
                         disabled={isImageUploading || (formData.imageUrl === "" && currentUpdatedProduct === null)}
-                        onClick={handelAddProduckt}
+                        onClick={handleAddProduct}
                         className="disabled:opacity-50 inline-flex w-full items-center justify-center bg-black px-9 py-3 pb-2 cursor-pointer rounded-md text-lg text-white font-medium uppercase tracking-wide">
 
 
